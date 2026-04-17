@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\Website;
 
-use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class RegisterRequest extends FormRequest
