@@ -37,6 +37,11 @@ class City extends Model
         return $this->hasMany(CityGateway::class);
     }
 
+    public function users(): HasMany
+    {
+        return $this->hasMany(User::class);
+    }
+
     ## Getters & Setters
 
     ## Query Scope Methods

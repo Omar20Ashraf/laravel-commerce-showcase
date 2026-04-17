@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Website;
 
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class RegisterRequest extends FormRequest
@@ -17,7 +18,7 @@ class RegisterRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
@@ -25,6 +26,7 @@ class RegisterRequest extends FormRequest
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
+            'city' => 'required|integer|exists:cities,id',
         ];
     }
 
@@ -34,7 +36,8 @@ class RegisterRequest extends FormRequest
             'name' => __('users.attributes.name'),
             'email' => __('users.attributes.email'),
             'password' => __('users.attributes.password'),
-            'password_confirmation' => __('users.attributes.password_confirmation')
+            'password_confirmation' => __('users.attributes.password_confirmation'),
+            'city' => __('users.attributes.city'),
         ];
     }
 }
