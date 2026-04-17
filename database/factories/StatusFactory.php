@@ -20,6 +20,7 @@ class StatusFactory extends Factory
         return [
             'name' => fake()->name(),
             'display_name' => fake()->name(),
+            'type' => fake()->name(),
         ];
     }
 }

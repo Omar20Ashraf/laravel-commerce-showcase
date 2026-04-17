@@ -25,7 +25,6 @@ class BookingFactory extends Factory
             'scheduled_at' => fake()->dateTime(),
             'closed_at' => fake()->dateTime(),
             'is_done' => fake()->boolean(),
-            //
         ];
     }
 }

@@ -62,7 +62,7 @@ class Invoice extends Model
         return $this->hasMany(Transaction::class);
     }
 
-    // # Getters & Setters
+    ## Getters & Setters
 
     public function setReferenceNumberAttribute($value)
     {
