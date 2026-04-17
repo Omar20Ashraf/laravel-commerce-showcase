@@ -73,6 +73,11 @@ class Order extends Model implements InvoiceModelContract
         return Module::orderModule()->value('id');
     }
 
+    public function setReferenceNumberAttribute($value): void
+    {
+        $this->attributes['reference_number'] = $this->nextReferenceNumber(prefix: 'ORD', serialStart: '0000001');
+    }
+
     public function resolveInvoiceService(): object
     {
         return new OrderService();

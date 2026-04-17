@@ -27,7 +27,9 @@ class OrderItemFactory extends Factory
             'price' => fake()->randomFloat(2, 10, 1000),
             'fee' => fake()->word(),
             'total_amount' => fake()->randomFloat(2, 10, 1000),
+            'qty' => fake()->numberBetween(1, 5),
             'provider_due_date_at' => fake()->dateTime(),
+            'scheduled_at' => fake()->dateTimeBetween('now', '+1 month'),
         ];
     }
 }

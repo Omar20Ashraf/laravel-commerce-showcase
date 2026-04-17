@@ -18,15 +18,18 @@ class OrderItem extends Model
 
         'price',
         'fee',
+        'qty',
         'total_amount',
 
         'provider_due_date_at',
+        'scheduled_at',
     ];
 
     protected function casts(): array
     {
         return [
             'provider_due_date_at' => 'datetime',
+            'scheduled_at' => 'datetime',
         ];
     }
 

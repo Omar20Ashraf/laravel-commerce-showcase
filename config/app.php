@@ -125,5 +125,6 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
-    'invoice_due_date_in_minutes' => env('INVOICE_DUE_DATE_IN_MINUTES', 30)
+    'invoice_due_date_in_minutes' => env('INVOICE_DUE_DATE_IN_MINUTES', 30),
+    'provider_due_date_in_minutes' => env('PROVIDER_DUE_DATE_IN_MINUTES', 30),
 ];
