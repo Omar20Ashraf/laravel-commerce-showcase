@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Traits\HasSerialReferenceNumber;
 use App\Traits\HasStatus;
 use App\Traits\HasTimezoneFields;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -77,5 +78,36 @@ class Invoice extends Model
     public function setTotalAmountAttribute($value): void
     {
         $this->attributes['total_amount'] = \round($value, 2) * 100;
+    }
+
+    public function getIsPayableAttribute(): bool
+    {
+        return $this->closed_at === null && ! $this->transactions()->exists();
+    }
+
+    public function getModuleIdAttribute(): string
+    {
+        return $this->invoiceable->moduleId;
+    }
+
+    public function getCityIdAttribute(): int
+    {
+        return $this->user->city_id;
+    }
+
+    ## Query Scope Methods
+
+    public function scopeByPaymentToken($query, string $token)
+    {
+        return $query->where('payment_token', $token);
+    }
+
+    ## Other Methods
+
+    public function availableGateways(): Collection
+    {
+        return Gateway::active()
+            ->availableForCityAndModule(cityId: $this->cityId, moduleId: $this->moduleId)
+            ->get();
     }
 }

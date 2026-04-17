@@ -52,4 +52,11 @@ class Transaction extends Model
     {
         $this->attributes['amount'] = \round($value, 2) * 100;
     }
+
+    ## Query Scope Methods
+
+    public function scopeByGatewayReference($query, string $reference)
+    {
+        return $query->where('trans_reference_number', $reference);
+    }
 }

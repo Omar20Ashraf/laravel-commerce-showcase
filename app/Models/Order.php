@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Contracts\InvoiceContract;
 use App\Traits\HasSerialReferenceNumber;
 use App\Traits\HasTimezoneFields;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -10,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 
-class Order extends Model
+class Order extends Model implements InvoiceContract
 {
     use HasFactory, HasSerialReferenceNumber, HasTimezoneFields;
 
@@ -44,7 +45,7 @@ class Order extends Model
         return $this->hasMany(OrderItem::class);
     }
 
-    public function invoices(): MorphOne
+    public function invoice(): MorphOne
     {
         return $this->morphOne(Invoice::class, 'invoiceable');
     }
@@ -64,5 +65,10 @@ class Order extends Model
     public function setTotalAmountAttribute($value): void
     {
         $this->attributes['total_amount'] = \round($value, 2) * 100;
+    }
+
+    public function getModuleIdAttribute(): int
+    {
+        return Module::orderModule()->value('id');
     }
 }

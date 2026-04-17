@@ -51,4 +51,26 @@ class Gateway extends Model
     {
         return $this->hasMany(Transaction::class);
     }
+
+    ## Query Scope Methods
+
+    public function scopeActive($query, bool $active = true)
+    {
+        return $query->where('is_active', $active);
+    }
+
+    public function scopeByCityId($query, int $cityId)
+    {
+        return $query->whereHas('cities', fn ($q) => $q->where('city_id', $cityId));
+    }
+
+    public function scopeByModuleId($query, int $moduleId)
+    {
+        return $query->whereHas('modules', fn ($q) => $q->where('module_id', $moduleId));
+    }
+
+    public function scopeAvailableForCityAndModule($query, int $cityId, int $moduleId)
+    {
+        return $query->byCityId(cityId: $cityId)->byModuleId(moduleId: $moduleId)->active();
+    }
 }
