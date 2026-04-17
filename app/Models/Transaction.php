@@ -49,6 +49,11 @@ class Transaction extends Model
         return $this->invoice->total_amount;
     }
 
+    public function getCallbackUrlAttribute(): string
+    {
+        return route('api.' . app('current_api_version') . '.callback.store');
+    }
+
     ## Query Scope Methods
 
     public function scopeByGatewayReference($query, string $reference)

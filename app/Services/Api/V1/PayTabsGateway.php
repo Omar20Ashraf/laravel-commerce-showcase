@@ -19,7 +19,7 @@ class PayTabsGateway implements PaymentGatewayContract
     {
         $payload = $this->prepareRequestData(transaction: $transaction);
 
-        $payload['callback'] = url(route('api.' . app('current_api_version') . 'callback'));
+        $payload['callback'] = $transaction->callbackUrl;
 
         try {
             $response = $this->sendPaymentHttpRequest->execute(
