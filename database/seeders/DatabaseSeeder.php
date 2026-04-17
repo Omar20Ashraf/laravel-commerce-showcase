@@ -16,6 +16,8 @@ class DatabaseSeeder extends Seeder
             ModulesTableSeeder::class,
             StatusesTableSeeder::class,
             GatewaysTableSeeder::class,
+            RolesTableSeeder::class,
+            UsersTableSeeder::class,
         ]);
     }
 }

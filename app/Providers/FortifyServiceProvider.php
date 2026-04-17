@@ -24,22 +24,12 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Fortify::registerView(function () {
-            return view('auth.register');
-        });
-
-        Fortify::loginView(function () {
-            return view('auth.login');
-        });
+        Fortify::ignoreRoutes();
 
         RateLimiter::for('login', function (Request $request) {
             $throttleKey = Str::transliterate(Str::lower($request->input(Fortify::username())).'|'.$request->ip());
 
             return Limit::perMinute(5)->by($throttleKey);
-        });
-
-        RateLimiter::for('two-factor', function (Request $request) {
-            return Limit::perMinute(5)->by($request->session()->get('login.id'));
         });
     }
 }
