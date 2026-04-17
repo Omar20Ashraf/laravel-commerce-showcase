@@ -2,15 +2,15 @@
 
 namespace App\Models;
 
-use App\Contracts\InvoiceContract;
-use App\Services\UserService;
+use App\Contracts\InvoiceModelContract;
+use App\Services\SubscriptionService;
 use App\Traits\HasTimezoneFields;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 
-class Subscription extends Model implements InvoiceContract
+class Subscription extends Model implements InvoiceModelContract
 {
     use HasFactory, HasTimezoneFields;
 
@@ -67,8 +67,8 @@ class Subscription extends Model implements InvoiceContract
 
     ## Other Methods
 
-    public function markAsPaid(): void
+    public function resolveInvoiceService(): object
     {
-        app(UserService::class)->extendSubscriptionPeriod(user: $this->user, daysNumber: $this->daysNumber);
+        return new SubscriptionService();
     }
 }

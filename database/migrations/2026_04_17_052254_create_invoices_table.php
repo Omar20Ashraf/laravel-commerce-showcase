@@ -18,7 +18,7 @@ return new class extends Migration
             $table->morphs('invoiceable');
 
             $table->string('reference_number')->unique();
-            $table->unsignedBigInteger('total_amount');
+            $table->unsignedBigInteger('total_amount')->default(0);
 
             $table->timestamp('due_date_at')->nullable();
             $table->timestamp('closed_at')->nullable();
