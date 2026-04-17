@@ -27,7 +27,7 @@ class LoginController extends Controller
      */
     public function login(LoginRequest $request): RedirectResponse
     {
-        $this->userAuthService->login(credentials: $request->validated());
+        $this->userAuthService->login(credentials: $request->validated(), guestIp: $request->ip());
 
         return redirect()->intended();
     }

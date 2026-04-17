@@ -1,9 +1,9 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-
 use App\Http\Controllers\Website\Auth\LoginController;
 use App\Http\Controllers\Website\Auth\RegisterController;
+use App\Http\Controllers\Website\CartItemController;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
@@ -19,3 +19,5 @@ Route::middleware('guest', 'throttle:login')->group(function () {
 Route::middleware('auth', 'throttle:web')->group(function () {
     Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 });
+
+Route::resource('cart-items', CartItemController::class)->except('show', 'create', 'edit');

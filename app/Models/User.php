@@ -62,6 +62,11 @@ class User extends Authenticatable
         return $this->hasMany(Invoice::class);
     }
 
+    public function cartItems(): HasMany
+    {
+        return $this->hasMany(CartItem::class);
+    }
+
     ## Getters & Setters
 
     public function getIsSubscribedAttribute(): bool
