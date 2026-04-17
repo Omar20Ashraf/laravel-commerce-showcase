@@ -22,7 +22,7 @@ class StatusRelatedObject extends Model
         'notes',
     ];
 
-    // # Relations
+    ## Relations
 
     public function status(): BelongsTo
     {

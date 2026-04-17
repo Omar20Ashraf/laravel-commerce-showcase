@@ -17,14 +17,14 @@ class InvoiceLine extends Model
         'amount',
     ];
 
-    // # Relations
+    ## Relations
 
     public function invoice(): BelongsTo
     {
         return $this->belongsTo(Invoice::class);
     }
 
-    // # Getters & Setters
+    ## Getters & Setters
 
     public function getAmountAttribute(): float|int
     {

@@ -17,7 +17,7 @@ class GatewayModule extends Model
         'module_id',
     ];
 
-    // # Relations
+    ## Relations
 
     public function gateway(): BelongsTo
     {

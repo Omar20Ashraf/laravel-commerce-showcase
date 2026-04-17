@@ -24,7 +24,7 @@ class Module extends Model
         ];
     }
 
-    // # Relations
+    ## Relations
 
     public function gateways(): BelongsToMany
     {

@@ -24,7 +24,7 @@ class City extends Model
         ];
     }
 
-    // # Relations
+    ## Relations
 
     public function gateways(): BelongsToMany
     {

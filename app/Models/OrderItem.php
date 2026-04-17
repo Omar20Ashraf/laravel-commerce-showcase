@@ -30,7 +30,7 @@ class OrderItem extends Model
         ];
     }
 
-    // # Relations
+    ## Relations
 
     public function order(): BelongsTo
     {
@@ -42,7 +42,7 @@ class OrderItem extends Model
         return $this->belongsTo(ServiceItem::class);
     }
 
-    // # Getters & Setters
+    ## Getters & Setters
 
     public function getPriceAttribute(): float|int
     {

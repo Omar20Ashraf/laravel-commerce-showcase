@@ -24,7 +24,7 @@ class ServiceItem extends Model
         'fee_price',
     ];
 
-    // # Relations
+    ## Relations
 
     public function service(): BelongsTo
     {
@@ -36,7 +36,7 @@ class ServiceItem extends Model
         return $this->hasMany(OrderItem::class);
     }
 
-    // # Getters & Setters
+    ## Getters & Setters
 
     public function getPriceAttribute(): float|int
     {

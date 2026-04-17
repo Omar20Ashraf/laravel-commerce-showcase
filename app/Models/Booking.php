@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Booking extends Model
 {
-    use HasFactory, HasStatus, HasTimezoneFields;
+        use HasFactory, HasStatus, HasTimezoneFields;
 
     protected $fillable = [
         'order_id',
@@ -31,7 +31,7 @@ class Booking extends Model
         ];
     }
 
-    // # Relations
+    ## Relations
 
     public function order(): BelongsTo
     {

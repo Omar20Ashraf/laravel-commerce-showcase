@@ -29,19 +29,7 @@ class Transaction extends Model
         ];
     }
 
-    // # Getters & Setters
-
-    public function getAmountAttribute(): float|int
-    {
-        return $this->attributes['amount'] / 100;
-    }
-
-    public function setAmountAttribute($value): void
-    {
-        $this->attributes['amount'] = \round($value, 2) * 100;
-    }
-
-    // # Relations
+    ## Relations
 
     public function invoice(): BelongsTo
     {
@@ -51,5 +39,17 @@ class Transaction extends Model
     public function gateway(): BelongsTo
     {
         return $this->belongsTo(Gateway::class);
+    }
+
+    ## Getters & Setters
+
+    public function getAmountAttribute(): float|int
+    {
+        return $this->attributes['amount'] / 100;
+    }
+
+    public function setAmountAttribute($value): void
+    {
+        $this->attributes['amount'] = \round($value, 2) * 100;
     }
 }

@@ -32,19 +32,7 @@ class Order extends Model
         ];
     }
 
-    // # Getters & Setters
-
-    public function getTotalAmountAttribute(): float|int
-    {
-        return $this->attributes['total_amount'] / 100;
-    }
-
-    public function setTotalAmountAttribute($value): void
-    {
-        $this->attributes['total_amount'] = \round($value, 2) * 100;
-    }
-
-    // # Relations
+    ## Relations
 
     public function user(): BelongsTo
     {
@@ -64,5 +52,17 @@ class Order extends Model
     public function booking(): HasMany
     {
         return $this->hasMany(Booking::class);
+    }
+
+    ## Getters & Setters
+
+    public function getTotalAmountAttribute(): float|int
+    {
+        return $this->attributes['total_amount'] / 100;
+    }
+
+    public function setTotalAmountAttribute($value): void
+    {
+        $this->attributes['total_amount'] = \round($value, 2) * 100;
     }
 }

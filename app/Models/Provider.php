@@ -33,7 +33,7 @@ class Provider extends Authenticatable
         ];
     }
 
-    // # Relations
+    ## Relations
 
     public function services(): HasMany
     {

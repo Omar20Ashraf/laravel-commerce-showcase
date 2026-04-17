@@ -18,7 +18,7 @@ class Package extends Model
         'description',
     ];
 
-    // # Relations
+    ## Relations
 
     public function services(): BelongsToMany
     {

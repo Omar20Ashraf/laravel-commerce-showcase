@@ -17,7 +17,7 @@ class CityGateway extends Model
         'gateway_id',
     ];
 
-    // # Relations
+    ## Relations
 
     public function city(): BelongsTo
     {

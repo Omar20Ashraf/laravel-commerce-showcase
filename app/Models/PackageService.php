@@ -17,7 +17,7 @@ class PackageService extends Model
         'service_id',
     ];
 
-    // # Relations
+    ## Relations
 
     public function package(): BelongsTo
     {

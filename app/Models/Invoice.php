@@ -40,7 +40,7 @@ class Invoice extends Model
         ];
     }
 
-    // # Relations
+    ## Relations
 
     public function user(): BelongsTo
     {

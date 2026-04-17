@@ -15,7 +15,7 @@ class Status extends Model
         'display_name',
     ];
 
-    // # Relations
+    ## Relations
 
     public function statusRelatedObjects(): HasMany
     {

@@ -20,7 +20,7 @@ class Service extends Model
         'desc',
     ];
 
-    // # Relations
+    ## Relations
 
     public function provider(): BelongsTo
     {
