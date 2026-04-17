@@ -17,7 +17,7 @@ class Transaction extends Model
         'gateway_id',
         'current_status_id',
 
-        'amount',
+        'due_date_at',
         'payload',
         'trans_reference_number',
     ];
@@ -25,6 +25,7 @@ class Transaction extends Model
     protected function casts(): array
     {
         return [
+            'due_date_at' => 'datetime',
             'payload' => 'array',
         ];
     }
@@ -45,12 +46,7 @@ class Transaction extends Model
 
     public function getAmountAttribute(): float|int
     {
-        return $this->attributes['amount'] / 100;
-    }
-
-    public function setAmountAttribute($value): void
-    {
-        $this->attributes['amount'] = \round($value, 2) * 100;
+        return $this->invoice->total_amount;
     }
 
     ## Query Scope Methods

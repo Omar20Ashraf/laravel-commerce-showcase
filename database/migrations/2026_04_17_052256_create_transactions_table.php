@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('gateway_id');
             $table->foreignId('current_status_id');
 
-            $table->unsignedBigInteger('amount');
+            $table->timestamp('due_date_at')->nullable();
             $table->json('payload')->nullable();
             $table->string('trans_reference_number')->nullable();
             $table->timestamps();

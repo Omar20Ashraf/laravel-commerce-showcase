@@ -24,9 +24,8 @@ class TransactionFactory extends Factory
             'invoice_id' => Invoice::factory(),
             'gateway_id' => Gateway::factory(),
             'current_status_id' => Status::factory(),
-            'amount' => fake()->randomFloat(2, 10, 1000),
             'payload' => [],
-            'trans_reference_number' => fake()->word(),
+            'trans_reference_number' => fake()->uuid(),
         ];
     }
 }
