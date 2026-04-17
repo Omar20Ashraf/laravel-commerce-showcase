@@ -14,13 +14,13 @@ class Module extends Model
 
     protected $fillable = [
         'name',
-        'is_active',
+        'is_available',
     ];
 
     protected function casts(): array
     {
         return [
-            'is_active' => 'boolean',
+            'is_available' => 'boolean',
         ];
     }
 
@@ -28,11 +28,20 @@ class Module extends Model
 
     public function gateways(): BelongsToMany
     {
-        return $this->belongsToMany(Gateway::class, 'gateway_module');
+        return $this->belongsToMany(Gateway::class, 'gateway_module')->withTimestamps();
     }
 
     public function gatewayModules(): HasMany
     {
         return $this->hasMany(GatewayModule::class);
+    }
+
+    ## Getters & Setters
+
+    ## Query Scope Methods
+
+    public function scopeAvailable($query, bool $available = true)
+    {
+        return $query->where('is_available', $available);
     }
 }

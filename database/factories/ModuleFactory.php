@@ -19,7 +19,7 @@ class ModuleFactory extends Factory
     {
         return [
             'name' => fake()->name(),
-            'is_active' => fake()->boolean(),
+            'is_available' => fake()->boolean(),
         ];
     }
 }

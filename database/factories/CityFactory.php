@@ -19,6 +19,7 @@ class CityFactory extends Factory
     {
         return [
             'name' => fake()->name(),
+            'code' => strtoupper(fake()->lexify('???')),
             'is_available' => fake()->boolean(),
         ];
     }

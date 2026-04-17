@@ -29,7 +29,7 @@ class Gateway extends Model
 
     public function cities(): BelongsToMany
     {
-        return $this->belongsToMany(City::class, 'city_gateway');
+        return $this->belongsToMany(City::class, 'city_gateway')->withTimestamps();
     }
 
     public function cityGateways(): HasMany
@@ -39,7 +39,7 @@ class Gateway extends Model
 
     public function modules(): BelongsToMany
     {
-        return $this->belongsToMany(Module::class, 'gateway_module');
+        return $this->belongsToMany(Module::class, 'gateway_module')->withTimestamps();
     }
 
     public function gatewayModules(): HasMany

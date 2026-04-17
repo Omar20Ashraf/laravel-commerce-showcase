@@ -22,7 +22,7 @@ class Package extends Model
 
     public function services(): BelongsToMany
     {
-        return $this->belongsToMany(Service::class, 'package_service');
+        return $this->belongsToMany(Service::class, 'package_service')->withTimestamps();
     }
 
     public function packageServices(): HasMany

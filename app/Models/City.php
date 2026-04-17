@@ -14,6 +14,7 @@ class City extends Model
 
     protected $fillable = [
         'name',
+        'code',
         'is_available',
     ];
 
@@ -28,11 +29,20 @@ class City extends Model
 
     public function gateways(): BelongsToMany
     {
-        return $this->belongsToMany(Gateway::class, 'city_gateway');
+        return $this->belongsToMany(Gateway::class, 'city_gateway')->withTimestamps();
     }
 
     public function cityGateways(): HasMany
     {
         return $this->hasMany(CityGateway::class);
+    }
+
+    ## Getters & Setters
+
+    ## Query Scope Methods
+
+    public function scopeAvailable($query, bool $available = true)
+    {
+        return $query->where('is_available', $available);
     }
 }
