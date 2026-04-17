@@ -51,7 +51,7 @@ class Order extends Model implements InvoiceModelContract
         return $this->morphOne(Invoice::class, 'invoiceable');
     }
 
-    public function booking(): HasMany
+    public function bookings(): HasMany
     {
         return $this->hasMany(Booking::class);
     }
@@ -71,6 +71,11 @@ class Order extends Model implements InvoiceModelContract
     public function getModuleIdAttribute(): int
     {
         return Module::orderModule()->value('id');
+    }
+
+    public function setReferenceNumberAttribute($value): void
+    {
+        $this->attributes['reference_number'] = $this->nextReferenceNumber(prefix: 'ORD', serialStart: '0000001');
     }
 
     public function resolveInvoiceService(): object

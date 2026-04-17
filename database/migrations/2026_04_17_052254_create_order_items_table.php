@@ -22,7 +22,10 @@ return new class extends Migration
             $table->unsignedBigInteger('fee');
             $table->unsignedBigInteger('total_amount');
 
+            $table->unsignedInteger('qty')->default(1);
+
             $table->timestamp('provider_due_date_at')->nullable();
+            $table->timestamp('scheduled_at')->nullable();
             $table->timestamps();
         });
     }
