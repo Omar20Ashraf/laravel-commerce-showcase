@@ -51,7 +51,7 @@ class Order extends Model implements InvoiceModelContract
         return $this->morphOne(Invoice::class, 'invoiceable');
     }
 
-    public function booking(): HasMany
+    public function bookings(): HasMany
     {
         return $this->hasMany(Booking::class);
     }

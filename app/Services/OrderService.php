@@ -31,6 +31,8 @@ class OrderService implements InvoiceRelatedObjectContract
             'closed_at' => now(),
             'paid_at' => now(),
         ]);
+
+        app(BookingService::class)->store(order: $order);
     }
 
     public function invoiceLines(InvoiceModelContract $order): array
