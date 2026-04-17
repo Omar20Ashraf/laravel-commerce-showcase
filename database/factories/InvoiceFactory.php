@@ -54,7 +54,7 @@ class InvoiceFactory extends Factory
     public function pending(): static
     {
         return $this->state(fn (array $attributes) => [
-            'current_status_id' => Status::where('type', 'Invoice')->where('name', 'pending')->first()?->id ?? Status::factory(),
+            'current_status_id' => Status::invoiceStatus()->pending()->first()?->id ?? Status::factory(),
             'closed_at' => null,
             'paid_at' => null,
         ]);
