@@ -67,6 +67,8 @@ return [
 
     'timezone' => 'UTC',
 
+    'client_timezone_request_header_name' => 'X-TIMEZONE',
+
     /*
     |--------------------------------------------------------------------------
     | Application Locale Configuration
