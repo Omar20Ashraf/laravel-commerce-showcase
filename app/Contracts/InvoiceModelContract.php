@@ -4,7 +4,7 @@ namespace App\Contracts;
 
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 
-interface InvoiceContract
+interface InvoiceModelContract
 {
     ## Relations
 
@@ -17,4 +17,6 @@ interface InvoiceContract
     ## Query Scope Methods
 
     ## Other Methods
+
+    public function resolveInvoiceService(): object;
 }

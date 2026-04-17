@@ -14,8 +14,10 @@ return new class extends Migration
         Schema::create('subscriptions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id');
+
             $table->boolean('is_free_trail')->default(false);
-            $table->timestamp('ends_at')->nullable();
+            $table->boolean('is_monthly')->default(false);
+            $table->boolean('is_yearly')->default(false);
             $table->timestamps();
         });
     }

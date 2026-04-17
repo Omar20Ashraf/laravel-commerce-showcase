@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['name', 'email', 'password', 'role_id', 'city_id'])]
+#[Fillable(['name', 'email', 'password', 'role_id', 'city_id', 'subscriptions_ends_at'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -30,6 +30,7 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
+            'subscriptions_ends_at' => 'datetime',
             'password' => 'hashed',
         ];
     }
@@ -59,5 +60,12 @@ class User extends Authenticatable
     public function invoices(): HasMany
     {
         return $this->hasMany(Invoice::class);
+    }
+
+    ## Getters & Setters
+
+    public function getIsSubscribedAttribute(): bool
+    {
+        return $this->subscriptions_ends_at?->isFuture() ?? false;
     }
 }

@@ -125,4 +125,5 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    'invoice_due_date_in_minutes' => env('INVOICE_DUE_DATE_IN_MINUTES', 30)
 ];

@@ -2,7 +2,8 @@
 
 namespace App\Models;
 
-use App\Contracts\InvoiceContract;
+use App\Contracts\InvoiceModelContract;
+use App\Services\OrderService;
 use App\Traits\HasSerialReferenceNumber;
 use App\Traits\HasTimezoneFields;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -11,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 
-class Order extends Model implements InvoiceContract
+class Order extends Model implements InvoiceModelContract
 {
     use HasFactory, HasSerialReferenceNumber, HasTimezoneFields;
 
@@ -70,5 +71,10 @@ class Order extends Model implements InvoiceContract
     public function getModuleIdAttribute(): int
     {
         return Module::orderModule()->value('id');
+    }
+
+    public function resolveInvoiceService(): object
+    {
+        return new OrderService();
     }
 }

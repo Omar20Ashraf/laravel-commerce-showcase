@@ -19,7 +19,7 @@ class PayTabsGateway implements PaymentGatewayContract
     {
         $payload = $this->prepareRequestData(transaction: $transaction);
 
-        $payload['callback'] = url(route('api.' . app('current_api_version') . 'callback'));
+        $payload['callback'] = $transaction->callbackUrl;
 
         try {
             $response = $this->sendPaymentHttpRequest->execute(
@@ -54,7 +54,7 @@ class PayTabsGateway implements PaymentGatewayContract
         return [
             'redirect_url' => $body['redirect_url'],
             'gateway_reference' => $body['tran_ref'],
-            'due_date_minutes' => config('payment.gateways.moyasar.pay_tabs'),
+            'due_date_minutes' => config('payment.gateways.pay_tabs.pay_tabs'),
         ];
     }
 

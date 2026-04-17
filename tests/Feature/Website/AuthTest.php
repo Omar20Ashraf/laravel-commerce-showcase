@@ -2,8 +2,10 @@
 
 namespace Tests\Feature\Website;
 
+use App\Jobs\CreateFreeTrialSubscriptionJob;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Queue;
 use Tests\TestCase;
 
 class AuthTest extends TestCase
@@ -28,15 +30,27 @@ class AuthTest extends TestCase
 
     public function test_user_can_register(): void
     {
+        Queue::fake();
+
+        $city = \App\Models\City::factory()->create();
+
         $response = $this->post(route('register.submit'), [
             'name' => 'John Doe',
             'email' => 'john@example.com',
             'password' => 'password123',
             'password_confirmation' => 'password123',
+            'city' => $city->id,
         ]);
 
         $response->assertRedirect(route('home'));
         $this->assertAuthenticated();
+
+        $user = User::where('email', 'john@example.com')->first();
+
+        Queue::assertPushed(CreateFreeTrialSubscriptionJob::class, function ($job) use ($user) {
+            return $job->user->id === $user->id;
+        });
+
         $this->assertDatabaseHas('users', [
             'email' => 'john@example.com',
         ]);

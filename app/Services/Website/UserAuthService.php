@@ -2,8 +2,10 @@
 
 namespace App\Services\Website;
 
+use App\Jobs\CreateFreeTrialSubscriptionJob;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
 class UserAuthService
@@ -13,12 +15,17 @@ class UserAuthService
      */
     public function register(array $data): void
     {
-        $user = User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => $data['password'],
-            'city_id' => $data['city'],
-        ]);
+        $user = DB::transaction(function () use ($data) {
+            $user = User::create([
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'password' => $data['password'],
+                'city_id' => $data['city'],
+            ]);
+            CreateFreeTrialSubscriptionJob::dispatch($user);
+
+            return $user;
+        });
 
         Auth::login($user);
     }
