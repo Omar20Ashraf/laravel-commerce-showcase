@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use App\Contracts\InvoiceContract;
 use App\Traits\HasTimezoneFields;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 
-class Subscription extends Model
+class Subscription extends Model implements InvoiceContract
 {
     use HasFactory, HasTimezoneFields;
 
@@ -33,8 +34,15 @@ class Subscription extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function invoices(): MorphOne
+    public function invoice(): MorphOne
     {
         return $this->morphOne(Invoice::class, 'invoiceable');
+    }
+
+    ## Getters & Setters
+
+    public function getModuleIdAttribute(): int
+    {
+        return Module::subscriptionModule()->value('id');
     }
 }

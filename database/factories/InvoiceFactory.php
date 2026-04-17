@@ -31,7 +31,7 @@ class InvoiceFactory extends Factory
             'due_date_at' => fake()->dateTime(),
             'closed_at' => fake()->dateTime(),
             'paid_at' => fake()->dateTime(),
-            'payment_token' => fake()->word(),
+            'payment_token' => fake()->unique()->uuid(),
         ];
     }
 
@@ -48,6 +48,15 @@ class InvoiceFactory extends Factory
         return $this->state(fn (array $attributes) => [
             'invoiceable_type' => Subscription::class,
             'invoiceable_id' => Subscription::factory(),
+        ]);
+    }
+
+    public function pending(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'current_status_id' => Status::invoiceStatus()->pending()->first()?->id ?? Status::factory(),
+            'closed_at' => null,
+            'paid_at' => null,
         ]);
     }
 }

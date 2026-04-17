@@ -17,7 +17,7 @@ class Transaction extends Model
         'gateway_id',
         'current_status_id',
 
-        'amount',
+        'due_date_at',
         'payload',
         'trans_reference_number',
     ];
@@ -25,6 +25,7 @@ class Transaction extends Model
     protected function casts(): array
     {
         return [
+            'due_date_at' => 'datetime',
             'payload' => 'array',
         ];
     }
@@ -45,11 +46,25 @@ class Transaction extends Model
 
     public function getAmountAttribute(): float|int
     {
-        return $this->attributes['amount'] / 100;
+        return $this->invoice->total_amount;
     }
 
-    public function setAmountAttribute($value): void
+    ## Query Scope Methods
+
+    public function scopeByGatewayReference($query, string $reference)
     {
-        $this->attributes['amount'] = \round($value, 2) * 100;
+        return $query->where('trans_reference_number', $reference);
+    }
+
+    public function scopeAvailableToPayment($query)
+    {
+        $statusIds = Status::transactionStatus()
+        ->where(function($q){
+            $q->where('name', 'success')->orWhere('name', 'pending');
+        })
+        ->pluck('id')
+        ->toArray();
+
+        return $query->whereNotIn('current_status_id', $statusIds);
     }
 }

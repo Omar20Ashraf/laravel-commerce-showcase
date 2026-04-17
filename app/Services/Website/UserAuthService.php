@@ -17,6 +17,7 @@ class UserAuthService
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => $data['password'],
+            'city_id' => $data['city'],
         ]);
 
         Auth::login($user);

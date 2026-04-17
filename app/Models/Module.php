@@ -44,4 +44,14 @@ class Module extends Model
     {
         return $query->where('is_available', $available);
     }
+
+    public function scopeOrderModule($query)
+    {
+        return $query->where('name', 'order');
+    }
+
+    public function scopeSubscriptionModule($query)
+    {
+        return $query->where('name', 'subscription');
+    }
 }

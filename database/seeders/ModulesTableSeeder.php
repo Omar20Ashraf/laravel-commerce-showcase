@@ -14,7 +14,7 @@ class ModulesTableSeeder extends Seeder
     {
         $modules = [
             [
-                'name' => 'service',
+                'name' => 'order',
                 'is_available' => true,
             ],
             [
@@ -27,7 +27,7 @@ class ModulesTableSeeder extends Seeder
             $module = $modules[$i];
             $moduleExists = Module::where('name', $module['name'])->exists();
 
-            if (!$moduleExists) {
+            if (! $moduleExists) {
                 Module::create([
                     'name' => $module['name'],
                     'is_available' => $module['is_available'],
