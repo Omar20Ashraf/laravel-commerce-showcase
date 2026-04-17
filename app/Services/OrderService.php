@@ -33,8 +33,19 @@ class OrderService implements InvoiceRelatedObjectContract
         ]);
     }
 
-    public function invoiceLines(InvoiceModelContract $subscription): array
+    public function invoiceLines(InvoiceModelContract $order): array
     {
-        return [];
+        $lines = [];
+
+        $items = $order->orderItems()->with('serviceItem')->get();
+
+        foreach ($items as $item):
+            $lines[] = [
+                'display_name' => $item->serviceItem->name,
+                'amount' => $item->total_amount,
+            ];
+        endforeach;
+
+        return $lines;
     }
 }
