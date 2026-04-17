@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 
 class ServiceItem extends Model
 {
@@ -36,7 +37,29 @@ class ServiceItem extends Model
         return $this->hasMany(OrderItem::class);
     }
 
+    public function cartItems(): HasMany
+    {
+        return $this->hasMany(CartItem::class);
+    }
+
+    public function provider(): HasOneThrough
+    {
+        return $this->hasOneThrough(
+            Provider::class,
+            Service::class,
+            'id',
+            'id',
+            'service_id',
+            'provider_id',
+        );
+    }
+
     ## Getters & Setters
+
+    public function getIsAvailableAttribute(): bool
+    {
+        return $this->provider->is_active;
+    }
 
     public function getPriceAttribute(): float|int
     {

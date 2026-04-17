@@ -27,7 +27,7 @@ class RegisterController extends Controller
      */
     public function register(RegisterRequest $request): RedirectResponse
     {
-        $this->userAuthService->register(data: $request->validated());
+        $this->userAuthService->register(data: $request->validated(), guestIp: $request->ip());
 
         return redirect()->intended();
     }

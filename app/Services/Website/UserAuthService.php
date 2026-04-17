@@ -6,6 +6,7 @@ use App\Jobs\CreateFreeTrialSubscriptionJob;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+    use App\Jobs\TransferGuestCartJob;
 use Illuminate\Validation\ValidationException;
 
 class UserAuthService
@@ -13,9 +14,9 @@ class UserAuthService
     /**
      * Handle user registration.
      */
-    public function register(array $data): void
+    public function register(array $data, ?string $guestIp = null): void
     {
-        $user = DB::transaction(function () use ($data) {
+        $user = DB::transaction(function () use ($data, $guestIp) {
             $user = User::create([
                 'name' => $data['name'],
                 'email' => $data['email'],
@@ -24,13 +25,17 @@ class UserAuthService
             ]);
             CreateFreeTrialSubscriptionJob::dispatch($user);
 
+            if ($guestIp) {
+                TransferGuestCartJob::dispatch($user, $guestIp);
+            }
+
             return $user;
         });
 
         Auth::login($user);
     }
 
-    public function login(array $credentials): void
+    public function login(array $credentials, ?string $guestIp = null): void
     {
         if (! Auth::attempt($credentials)) {
             throw ValidationException::withMessages([
@@ -40,6 +45,10 @@ class UserAuthService
         }
 
         session()->regenerate();
+
+        if ($guestIp) {
+            TransferGuestCartJob::dispatch(Auth::user(), $guestIp);
+        }
     }
 
     /**
