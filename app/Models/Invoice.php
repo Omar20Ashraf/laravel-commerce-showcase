@@ -82,7 +82,7 @@ class Invoice extends Model
 
     public function getIsPayableAttribute(): bool
     {
-        return $this->closed_at === null && ! $this->transactions()->exists();
+        return $this->closed_at === null && ! $this->transactions()->availableToPayment()->exists();
     }
 
     public function getModuleIdAttribute(): string

@@ -55,4 +55,16 @@ class Transaction extends Model
     {
         return $query->where('trans_reference_number', $reference);
     }
+
+    public function scopeAvailableToPayment($query)
+    {
+        $statusIds = Status::transactionStatus()
+        ->where(function($q){
+            $q->where('name', 'success')->orWhere('name', 'pending');
+        })
+        ->pluck('id')
+        ->toArray();
+
+        return $query->whereNotIn('current_status_id', $statusIds);
+    }
 }

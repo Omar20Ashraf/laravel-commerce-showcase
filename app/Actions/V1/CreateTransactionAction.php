@@ -20,6 +20,8 @@ class CreateTransactionAction
 
         $pendingStatus = Status::transactionStatus()->pending()->first();
 
+        // [TO DO] create pending transaction status
+
         $transaction = $invoice->transactions()->create([
             'gateway_id' => $gateway->id,
             'current_status_id' => $pendingStatus->id,

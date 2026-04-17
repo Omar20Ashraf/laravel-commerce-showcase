@@ -19,7 +19,7 @@ class MoyasarGateway implements PaymentGatewayContract
     {
         $payload = $this->prepareRequestData(transaction: $transaction);
 
-        $payload['callback_url'] = config('payment.return_url');
+        $payload['callback_url'] = url(route('api.' . app('current_api_version') . 'callback'));
 
         try {
             $response = $this->sendPaymentHttpRequest->execute(
