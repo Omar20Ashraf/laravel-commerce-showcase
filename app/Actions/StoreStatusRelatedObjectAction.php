@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class StoreStatusRelatedObjectAction
 {
-    public function execute(Model $statusable, Status $status, int $userId, ?string $notes = null): void
+    public function execute(Model $statusable, Status $status, ?int $userId = null, ?string $notes = null): void
     {
         $statusable->statusRelatedObjects()->create([
             'status_id' => $status->id,

@@ -12,34 +12,34 @@ class InvoiceService
 {
     public function store(InvoiceModelContract $invoiceable, int $userId, bool $isFree = false): void
     {
-        $paidStatus = Status::invoiceStatus()->pending()->first();
+        $pendingStatus = Status::invoiceStatus()->pending()->first();
 
         $invoice = $invoiceable->invoice()->create([
             'reference_number' => '',
             'user_id' => $userId,
-            'current_status_id' => $paidStatus->id,
+            'current_status_id' => $pendingStatus->id,
             'due_date_at' => $isFree ? null : now()->addDays(config('app.invoice_due_date_in_minutes'))
         ]);
+
+        app(StoreStatusRelatedObjectAction::class)->execute(
+            statusable: $invoice,
+            status: $pendingStatus,
+        );
 
         app(InvoiceLineService::class)->storeLines(
             invoice: $invoice,
             lines: $invoiceable->resolveInvoiceService()->invoiceLines($invoiceable)
         );
 
-        $this->updateFinalTotalAmount(invoice: $invoice);
-
-        if ($isFree) {
-            $this->markAsPaid(invoice: $invoice);
-        }
-    }
-
-    public function updateFinalTotalAmount(Invoice $invoice): void
-    {
         $linesTotals = $invoice->lines()->sum('amount') / 100; // the query will get the sum without using the value from getter
 
         $invoice->update([
             'total_amount' => $linesTotals,
         ]);
+
+        if ($isFree) {
+            $this->markAsPaid(invoice: $invoice);
+        }
     }
 
     public function markAsPaid(Invoice $invoice): void
