@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Contracts\InvoiceContract;
+use App\Services\UserService;
 use App\Traits\HasTimezoneFields;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -15,15 +16,18 @@ class Subscription extends Model implements InvoiceContract
 
     protected $fillable = [
         'user_id',
+
         'is_free_trail',
-        'ends_at',
+        'is_monthly',
+        'is_yearly',
     ];
 
     protected function casts(): array
     {
         return [
             'is_free_trail' => 'boolean',
-            'ends_at' => 'datetime',
+            'is_monthly' => 'boolean',
+            'is_yearly' => 'boolean',
         ];
     }
 
@@ -44,5 +48,27 @@ class Subscription extends Model implements InvoiceContract
     public function getModuleIdAttribute(): int
     {
         return Module::subscriptionModule()->value('id');
+    }
+
+    public function getDaysNumberAttribute(): int
+    {
+        if ($this->is_free_trail) {
+            return config('subscription.free_trial_days');
+        }
+
+        if ($this->is_monthly) {
+            return config('subscription.monthly_trial_days');
+        }
+
+        return config('subscription.yearly_trial_days');
+    }
+
+    ## Query Scope Methods
+
+    ## Other Methods
+
+    public function markAsPaid(): void
+    {
+        app(UserService::class)->extendSubscriptionPeriod(user: $this->user, daysNumber: $this->daysNumber);
     }
 }
