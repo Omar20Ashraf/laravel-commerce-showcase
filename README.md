@@ -1,58 +1,211 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Laravel Commerce Showcase
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A Laravel-based service marketplace platform where users subscribe, browse service packages, and pay through multiple payment gateways depending on their location.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Table of Contents
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- [How to Run the Project](#how-to-run-the-project)
+- [To-Do List](#to-do-list)
+- [Business Logic](#business-logic)
+- [Database Structure](#database-structure)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## How to Run the Project
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Requirements
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- PHP >= 8.3
+- Composer
+- MySQL (or any supported database)
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+### Installation Steps
 
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+**1. Clone the repository**
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+git clone https://github.com/Omar20Ashraf/laravel-commerce-showcase
+cd laravel-commerce-showcase
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+**2. Install PHP dependencies**
 
-## Contributing
+```bash
+composer install
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+**3. Set up environment file**
 
-## Code of Conduct
+```bash
+cp .env.example .env
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Open `.env` and configure your database credentials:
 
-## Security Vulnerabilities
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=laravel-commerce-showcase
+DB_USERNAME=root
+DB_PASSWORD=
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+**4. Create the database**
 
-## License
+Create a new MySQL database named `laravel-commerce-showcase` (or whatever you set in `DB_DATABASE`).
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+**5. Generate application key**
+
+```bash
+php artisan key:generate
+```
+
+**6. Run migrations and seed the database**
+
+```bash
+php artisan migrate --seed
+```
+
+**7. Serve the application**
+
+```bash
+php artisan serve
+```
+
+The application will be available at `http://127.0.0.1:8000`.
+
+---
+
+## To-Do List
+
+The following features and improvements are pending implementation:
+
+- [ ] **Console command** — Create a scheduled Artisan command to automatically close overdue invoices, bookings, and order items based on configurable due dates
+- [ ] **Application design** — Implement the full UI/UX design across all pages and views of the application
+- [ ] **Payment callback handling** — Handle success and failure payment callbacks properly; currently the callbacks are only received but no action is taken on either outcome
+- [ ] **Callback signature validation** — Validate the webhook/callback signature for every supported payment gateway to ensure request authenticity
+- [ ] **Admin dashboard** — Build an admin panel to list, create, and manage services, packages, service items, and related entities
+- [ ] **Provider order approval flow** — Implement the provider approval step so that a provider must explicitly approve each order item before an invoice with a payment token is generated
+
+---
+
+## Business Logic
+
+### Subscription & Free Trial
+
+- When a user registers, they automatically receive a free trial subscription for a configurable number of days (defined in the application config).
+- While the user is within the free trial period, any item they checkout will have a fee of **0**.
+
+### Cart
+
+- Users can add active service items to the cart.
+- The cart supports both **guest users** (identified by IP address) and **authenticated users**.
+- When a guest registers or logs in, the system checks for any cart items associated with their IP that have no `user_id`. If found, those items are transferred to the authenticated user's account.
+
+### Checkout & Order Flow
+
+1. **Checkout** — A successful checkout creates an **Order** containing one or more **Order Items**.
+2. **Provider Approval** — Each order item must be individually approved by the respective service provider.
+3. **Invoice Creation** — Once the **last** order item is approved, an **Invoice** is created. The invoice contains **Invoice Lines** that correspond 1:1 with all approved order items.
+4. **Payment Token** — A payment token is generated alongside the invoice and is used to initiate the payment flow.
+
+### Web to API Handoff
+
+After the invoice and payment token are created on the web side, the user is transferred to the **API layer** to complete payment. The API is versioned.
+
+### API Endpoints
+
+**`GET /api/v1/invoices/{paymentToken}`** — Invoice Details & Available Gateways
+
+Returns the full invoice data along with the list of payment gateways available to the user. Gateway availability is determined by:
+- The user's **city**
+- The **module** (type/category) of the invoice
+
+---
+
+**`POST /api/v1/transactions`** — Initiate Payment Transaction
+
+Starts a payment transaction with the selected payment gateway using the **hosted page** method. Returns a redirect URL to which the customer must be forwarded to complete payment on the gateway's page.
+
+---
+
+**`POST /api/v1/callback`** — Payment Gateway Callback
+
+Receives the asynchronous callback from the payment gateway after the transaction is completed. Handles both success and failure outcomes and validates the callback signature.
+
+---
+
+## Database Structure
+
+### Service Catalog
+
+```
+providers
+services
+service_items
+packages
+package_service             (pivot)
+```
+
+A **provider** owns multiple **services**. Each service contains multiple **service items**, which are the actual purchasable units added to the cart. **Packages** group services together via the `package_service` pivot table.
+
+---
+
+### Cart & Orders
+
+```
+carts
+cart_items
+orders
+order_items
+```
+
+---
+
+### Invoices (Polymorphic)
+
+The invoice is polymorphic and can belong to either an **Order** or a **Subscription**, allowing both service purchases and subscription renewals to share the same invoicing and payment flow.
+
+```
+invoices
+invoice_lines
+```
+
+---
+
+### Subscriptions
+
+```
+subscriptions
+```
+
+---
+
+### Payment Gateways
+
+Gateway availability per transaction is determined by the user's city and the invoice module (type).
+
+```
+gateways
+
+gateway_module              (pivot: gateway ↔ invoice module/type)
+
+city_gateway                (pivot: gateway ↔ city)
+```
+
+---
+
+### Status (Polymorphic)
+
+Statuses are tracked polymorphically, meaning any model (order, order item, invoice, subscription, etc.) can have a status history without dedicated status columns on each table.
+
+```
+statuses
+
+status_related_object       (polymorphic pivot)
+```
+
+This design allows a full **status history** to be maintained per record, and new models can be tracked simply by morphing to this table — no migration changes required.
