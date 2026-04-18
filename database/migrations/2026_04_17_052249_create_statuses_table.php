@@ -16,6 +16,9 @@ return new class extends Migration
             $table->string('name');
             $table->string('display_name');
             $table->string('type');
+
+            $table->index(['type', 'name'], 'statuses_type_name_index');
+
             $table->timestamps();
         });
     }

@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->boolean('is_available')->default(true);
+
+            $table->index('name', 'modules_name_index');
             $table->timestamps();
         });
     }

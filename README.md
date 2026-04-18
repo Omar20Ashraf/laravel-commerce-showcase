@@ -89,6 +89,7 @@ The following features and improvements are pending implementation:
 - [ ] **Callback signature validation** — Validate the webhook/callback signature for every supported payment gateway to ensure request authenticity
 - [ ] **Admin dashboard** — Build an admin panel to list, create, and manage services, packages, service items, and related entities
 - [ ] **Provider order approval flow** — Implement the provider approval step so that a provider must explicitly approve each order item before an invoice with a payment token is generated
+- [ ] **Cache status** — cache statuses
 
 ---
 
